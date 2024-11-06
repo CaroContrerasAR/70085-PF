@@ -6,23 +6,13 @@ class ProductController{
         const {limit = 10, page = 1, sort = 1, query} = req.query
         try {
             const products = await productService.getProducts({limit, page, sort, query})
-            res.status(200).json({
-                payload: products,
-                totalPages: products.totalPages,
-                prevpage: products.hasPrevPage ? page - 1 : null,
-                nextPage: products.hasnextPage ? page + 1 : null,
-                page: products.page,
-                hasPrevPage: products.hasPrevPage,
-                hasNextPage: products.hasNextPage,
-                prevLink: products.hasPrevPage ? `/api/products?limit=${limit}&page=${productos.prevPage}&sort=${sort}&query=${query}` : null,
-                nextLink: products.hasNextPage ? `/api/products?limit=${limit}&page=${products.nextPage}&sort=${sort}&query=${query}` : null,
-            })
+            res.status(200).json(products)
         } catch (error) {
             res.status(500).send({error: error.message})
         }
     }
     async getProductById(req, res){
-        const {id} = req.params
+        const id = req.params.pid
         try {
             const productById = await productService.getProductById(id)
             if(!productById) return res.status(404).send('Product not found')
@@ -31,26 +21,26 @@ class ProductController{
             res.status(500).send({error: error.message})
         }
     }
-    async createProduct(req, res){
+    async addProduct(req, res){
         try {
-            const product = await productService.createProduct(req.body)
+            const product = await productService.addProduct(req.body)
             res.status(201).json(product)
         } catch (error) {
             res.status(500).send({error: error.message})
         }
     }
     async updateProduct(req, res){
-        const {id} = req.params
+        const id = req.params.pid
         try {
             const productById = await productService.updateProduct(id, req.body)
             if(!productById) return  res.status(404).send('Product not found')
-            res.status(200).json(productById)
+            res.status(200).json({message:'Product Updated Successfully'})
         } catch (error) {
             res.status(500).send({error: error.message})
         }
     }
     async deleteProduct(req, res){
-        const {id} = req.params
+        const id = req.params.pid
         try {
             const deleteProduct = await productService.deleteProduct(id)
             if(!deleteProduct) return  res.status(404).send('Product not found')

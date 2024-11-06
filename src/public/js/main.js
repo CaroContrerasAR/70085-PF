@@ -1,29 +1,28 @@
 const socket = io();
 const tabla = document.getElementById('tabla');
 const form = document.querySelector('form');
-
-// Manejo de conexión con el servidor
-socket.on('connect', () => {
-    console.log('Connected to server');
-});
-
+ 
 // Actualizar la tabla con datos de productos
 socket.on('products', (data) => {
-    //console.log(data);
+    renderProduct(data.docs)
+})
+    
+const renderProduct = (products) =>{
+    
     // Construir el HTML de la tabla
-    const rows = data.map((e) => `
+    const rows = products.map((e) => `
         <tr>
-          <th scope="row">${e._id}</th>
-          <td>${e.title}</td>
-          <td>${e.description}</td>
-          <td>$${e.price}</td>
-          <td>${e.stock}</td>
-          <td>
+        <th scope="row">${e._id}</th>
+        <td>${e.title}</td>
+        <td>${e.description}</td>
+        <td>$${e.price}</td>
+        <td>${e.stock}</td>
+        <td>
             <img style="height: 50px;" src="${e.thumbnail || './img/default.png'}" alt="${e.title}">
-          </td>
-          <td>
+        </td>
+        <td>
             <button type="button" class="btn btn-danger btn-sm btnDelete" data-id="${e._id}">Delete</button>
-          </td>
+        </td>
         </tr>
     `).join('');
     
@@ -36,7 +35,7 @@ socket.on('products', (data) => {
             deleteProduct(id);
         });
     });
-});
+}
 
 // Función para emitir la eliminación de productos
 const deleteProduct = (id) => {
@@ -56,19 +55,19 @@ form.addEventListener('submit', (event) => {
 });
 
 // Función para emitir la adición de productos
-const addProduct = async (products) =>{
+const addProduct = async (product) =>{
     try {
         const response = await fetch('http://localhost:8080/api/products', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(products)
+            body: JSON.stringify(product)
         });
 
         if (response.ok) {
             alert('product added successfully');
-            socket.emit('addProduct', products);
+            socket.emit('addProduct', product);
         } else {
             alert('Error adding product');
         }

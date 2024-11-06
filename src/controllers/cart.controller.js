@@ -107,7 +107,6 @@ class CartController{
             await ticket.save()
 
             cart.products = unProducts
-            // cart.products = cart.products.filter(items=>unProducts.some(pid=>pid.equal))
             await cart.save()
 
             // await sendEmail(userCart.email, userCart.first_name, ticket._id)

@@ -4,8 +4,9 @@ class ProductDao{
     async findById(id){
         return await ProductModel.findById(id)
     }
-    async find(query){
-        return await ProductModel.find(query)
+    async find({limit, page, sort, query}){
+         const options ={ limit, page, sort: sort ? {[sort] : 1 } : null}
+         return await ProductModel.paginate(query  ? {category: query} :{}, options)
     }
     async save(productData){
         const product = new ProductModel(productData)

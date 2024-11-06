@@ -5,9 +5,9 @@ import passport from 'passport'
 const router = Router()
 const productController = new ProductController()
 
-router.get('/',passport.authenticate('jwt',{session:false}),productController.getProducts)
+router.get('/',passport.authenticate('current',{session:false}),productController.getProducts)
 router.get('/:pid', productController.getProductById)
-router.post('/', productController.createProduct) //addProduct
+router.post('/', productController.addProduct) //create
 router.put('/:pid', productController.updateProduct)
 router.delete('/:pid', productController.deleteProduct)
 

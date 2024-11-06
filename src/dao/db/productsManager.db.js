@@ -46,8 +46,8 @@ class ProductManager {
         try {
             // Añade verificación de parámetros
             if (typeof page !== 'number' || typeof limit !== 'number' || page <= 0 || limit <= 0) {
-            throw new Error('Invalid parameters');
-        }
+                throw new Error('Invalid parameters');
+            }
             const skip = (page - 1) * limit
             let filter={ }
             let sortOption={ }
