@@ -49,7 +49,7 @@ form.addEventListener('submit', (event) => {
     const product = Object.fromEntries(formData);
     product.price = parseFloat(product.price);
     product.stock = parseInt(product.stock, 10);
-    //console.log('Form data:', product);
+    console.log('Form data:', product);
     addProduct(product);
     form.reset(); // Opcional: resetear el formulario después de enviar
 });
@@ -60,14 +60,16 @@ const addProduct = async (product) =>{
         const response = await fetch('http://localhost:8080/api/products', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
             body: JSON.stringify(product)
         });
 
         if (response.ok) {
+            const data = await response.json()
             alert('product added successfully');
-            socket.emit('addProduct', product);
+            socket.emit('addProduct', data);
         } else {
             alert('Error adding product');
         }

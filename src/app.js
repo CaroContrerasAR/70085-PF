@@ -3,6 +3,7 @@ import { engine } from 'express-handlebars'
 import cookieParser from 'cookie-parser'
 import passport from 'passport'
 import session from 'express-session'
+import cors from 'cors'
 import './db.js'
 
 import productRouter from './routes/products.routes.js'
@@ -23,6 +24,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static("./src/public"))
 app.use(cookieParser())
+app.use(cors())
 
 initializePassport()
 app.use(passport.initialize())
