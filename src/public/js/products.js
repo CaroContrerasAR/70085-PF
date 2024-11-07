@@ -9,6 +9,7 @@ socket.on('products', (data) => {
     //console.log(data);
     const containerProducts = document.getElementById('container')
     containerProducts.innerHTML = ``
+
     data.forEach(e => {
         const card = document.createElement('div')
         card.innerHTML = `<p>${e._id}</p>
@@ -25,15 +26,21 @@ socket.on('products', (data) => {
                                       <button type="button" class="btn btn-danger btn-sm btnBuy" data-id="${e._id}">Agregar al Carrito</button>
                               `
         containerProducts.appendChild(card)
-
-    // Adjuntar eventos a los botones de comprar
-        document.querySelectorAll('.btnBuy').forEach(button => {
-            button.addEventListener('click', (event) => {
-                event.preventDefault()
-                const id = button.getAttribute('data-id');
-                alert(`Producto ${id} agregado al Carrito`);
-            });
-        });
     });
     
+    // // Adjuntar eventos a los botones de comprar
+    // document.querySelectorAll('.btnBuy').forEach(button => {
+    //     button.addEventListener('click', (event) => {
+    //         event.preventDefault()
+    //         const id = button.getAttribute('data-id');
+    //         alert(`Producto ${id} agregado al Carrito`);
+    //     });
+    // });    
+
+    containerProducts.addEventListener('click', (event)=>{
+        if (event.target && event.target.classList.container('btnBuy')){
+            const prodId = event.target.getAttribute('data-id')
+            socket. emit('carts', {prodId})
+        }
+    })
 })

@@ -1,9 +1,16 @@
 import bcrypt from 'bcrypt'
 import passport from 'passport'
+import jwt from 'jsonwebtoken'
+import config, { configObject } from '../config/config.js'
+const {jwtSecret} = configObject
 
 const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10))
 
 const isValidPassword = (password, user)=> bcrypt.compareSync(password, user.password)
+
+const generateToken = (user)=>{
+    return jwt.sign(user, jwtSecret, {expiresIn:'1h'})
+}
 
 const passportCall = (strategy) => {
     return async (req, res, next)=>{
@@ -36,4 +43,4 @@ const Total = (products)=>{
     })
     return total
 }
-export { createHash, isValidPassword, passportCall, authorization, Total}
+export { createHash, isValidPassword, generateToken, passportCall, authorization, Total}

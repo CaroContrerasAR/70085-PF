@@ -2,7 +2,9 @@ import jwt from 'jsonwebtoken'
 import UserService from '../services/user.service.js'
 import UserDto from '../dto/user.dto.js'
 const userService = new UserService()
+import { configObject } from '../config/config.js'
 //const userDto = new UserDto(user)
+const {jwtSecret} = configObject
 
 class UserController{
     async register(req, res){
@@ -24,7 +26,7 @@ class UserController{
             email: newUser.email,
             role: newUser.role,
             cart: newUser.cart
-          }, 'coderhouse', {expiresIn:'1h'})
+          }, jwtSecret, {expiresIn:'1h'})
           // return token
           // console.log(token);
 
@@ -49,7 +51,7 @@ class UserController{
             email: loggedUser.email,
             role: loggedUser.role,
             cart: loggedUser.cart
-          }, 'coderhouse', {expiresIn:'1h'})
+          }, jwtSecret, {expiresIn:'1h'})
             
           res.cookie('coderCookieToken',token,{
               maxAge:60*60*1000,
@@ -63,7 +65,7 @@ class UserController{
 
     async current(req, res){
       if (req.user) {
-        const user = req.user   //console.log(user); // Añade esta línea, luego borrar
+        const user = req.user  // console.log(user); // Añade esta línea, luego borrar
         const userDTO = new UserDto(user) //usar en service, ver despues
         res.render('profile', {user: userDTO}) //luego ira home(cambiar por products)
       } else {

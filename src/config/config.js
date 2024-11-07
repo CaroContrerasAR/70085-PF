@@ -1,12 +1,27 @@
+import dotenv from 'dotenv'
 import passport from 'passport'
 import jwt from 'passport-jwt' //Estrategia para JWT
 import GitHubStrategy from 'passport-github2' //Estrategia con Github
 import GoogleStrategy from 'passport-google-oauth20' //Estrategia con Google
 
 import UserModel from '../dao/models/users.model.js'
+import program from '../utils/commander.js'
 
 const JwtStrategy = jwt.Strategy
 const ExtractJwt = jwt.ExtractJwt
+const {mode} = program.opts()
+
+dotenv.config({
+    path: mode === 'dev'?'./.env.dev':'./.env.prod'
+})
+
+export const configObject = {
+    PORT: process.env.PORT,
+    MONGO_URI: process.env.URI,
+    jwtSecret: process.env.JWT_SECRET,
+    sessionSecret: process.env.SESSION_SECRET,
+    mailerPassword: process.env.MAILER_PASSWORD
+}
 
 const initializePassport = () =>{
     //strategia para JWT

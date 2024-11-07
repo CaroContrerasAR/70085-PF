@@ -11,13 +11,18 @@ import cartRouter from './routes/carts.routes.js'
 import viewsRouter from './routes/views.routes.js'
 import sessionRouter from './routes/session.router.js'
 import initializePassport from './config/config.js'
+import {configObject} from './config/config.js'
 
 import ProductManager from './dao/db/productsManager.db.js'
 const manager = new ProductManager()
 
 const app = express()
-const PORT = 8080
+const { sessionSecret, PORT } = configObject;
 
+if (!sessionSecret) {
+    console.error('Error: sessionSecret is not defined!');
+    process.exit(1);  // Evitar que el servidor se ejecute sin un `sessionSecret`
+}
 
 //Midlewares
 app.use(express.json())
@@ -29,7 +34,7 @@ app.use(cors())
 initializePassport()
 app.use(passport.initialize())
 app.use(session({
-    secret:'secretCoder',
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: true,
     cookie: {maxAge: 60*60*1000, httpOnly: true, secure: false}
