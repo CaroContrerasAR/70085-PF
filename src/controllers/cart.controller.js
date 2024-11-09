@@ -27,7 +27,8 @@ class CartController{
         return await cartService.getCartById(cid)
     }
     async addProductToCart(req, res){
-        const cid = req.params.cid
+        //const cid = req.params.cid
+        const cid = req.user.cart
         const pid = req.params.pid
         const qtty = req.body.quantity || 1
         try {

@@ -28,18 +28,11 @@ socket.on('products', (data) => {
         containerProducts.appendChild(card)
     });
     
-    // // Adjuntar eventos a los botones de comprar
-    // document.querySelectorAll('.btnBuy').forEach(button => {
-    //     button.addEventListener('click', (event) => {
-    //         event.preventDefault()
-    //         const id = button.getAttribute('data-id');
-    //         alert(`Producto ${id} agregado al Carrito`);
-    //     });
-    // });    
-
     containerProducts.addEventListener('click', (event)=>{
+        event.preventDefault()
         if (event.target && event.target.classList.container('btnBuy')){
             const prodId = event.target.getAttribute('data-id')
+            alert(`Producto ${id} agregado al Carrito`)
             socket. emit('carts', {prodId})
         }
     })
